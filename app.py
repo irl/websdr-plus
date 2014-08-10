@@ -34,7 +34,7 @@ def hello():
     return "WebSDR-Plus!"
 
 @app.route("/2m.json")
-def hello():
+def samples():
     return jsonify({'samples': radio.getSamples(), 'minf': 144.0e6, 'maxf': 146.0e6})
 
 if __name__ == "__main__":
