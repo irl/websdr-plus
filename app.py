@@ -10,7 +10,7 @@
 import numpy as np
 from rtlsdr import RtlSdr
 import time, threading
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 NFFT = 1024*4
 NUM_SAMPLES_PER_SCAN = NFFT*16
@@ -31,7 +31,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "WebSDR-Plus!"
+    return render_template("index.html")
 
 @app.route("/2m.json")
 def samples():
