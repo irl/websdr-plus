@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     # some defaults
     sdr.rs = 2.0e6
-    sdr.fc = 145.0e6
+    sdr.fc = 144.0e6
     sdr.gain = 10
 
     # start polling for samples
