@@ -1,0 +1,64 @@
+<h1>WebSDR-Plus</h1>
+
+<canvas id="myCanvas" width="1024" height="300" style="width:819px; height:300px;background-color: #000;"></canvas>
+<p>144</p>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script type="text/javascript">
+
+
+var canvas = document.getElementById("myCanvas");
+var canvasWidth = canvas.width;
+var canvasHeight = canvas.height;
+var ctx = canvas.getContext("2d");
+var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+
+// That's how you define the value of a pixel //
+function drawPixel (x, y, r, g, b, a) {
+    var index = (x + y * canvasWidth) * 4;
+    
+    canvasData.data[index + 0] = r;
+    canvasData.data[index + 1] = g;
+    canvasData.data[index + 2] = b;
+    canvasData.data[index + 3] = a;
+}
+
+function getPixel(x, y) {
+    var index = (x + y * canvasWidth) * 4;
+    
+    r = canvasData.data[index + 0];
+    g = canvasData.data[index + 1];
+    b = canvasData.data[index + 2];
+    a = canvasData.data[index + 3];
+
+    return {'r': r, 'g': g,'b': b,'a': a}
+}
+
+// That's how you update the canvas, so that your //
+// modification are taken in consideration //
+function updateCanvas() {
+$.ajax({
+  url: '/2m.json',
+  async: false,
+  dataType: 'json',
+  success: function (response) {
+    window.sampleData = response
+  }
+});
+for ( j = canvasHeight - 1 ; j > 0 ; --j ) {
+	for ( i = 0 ; i < canvasWidth ; ++i ) {
+		pixel = getPixel(i,j-1);
+		drawPixel(i,j,pixel.r,pixel.g,pixel.b,pixel.a);
+	}
+}
+	for ( i = 0 ; i < canvasWidth ; ++i ) {
+		drawPixel(i,1,0,sampleData.samples[i]*2000000,128,255);
+	}
+	ctx.putImageData(canvasData, 0, 0);
+setTimeout(updateCanvas, 040);
+}
+
+updateCanvas();
+
+</script>
+
